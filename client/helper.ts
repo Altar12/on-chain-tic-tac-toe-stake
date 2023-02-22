@@ -4,7 +4,7 @@ export function isValidAddress(input: string): boolean {
     if (input.length < 32 || input.length > 44)
       return false
     let asciiValue: number
-    for (let index=0; index<44; index++) {
+    for (let index=0; index<input.length; index++) {
       asciiValue = input.charCodeAt(index)
       if (asciiValue>47 && asciiValue<58
           || asciiValue>64 && asciiValue<91

@@ -3,8 +3,7 @@ import { Program,
          web3, 
          AnchorProvider, 
          Wallet, 
-         BN, 
-         IdlTypes} from "@project-serum/anchor"
+         BN } from "@project-serum/anchor"
 import * as token from "@solana/spl-token"
 import idl from "../target/idl/tic_tac_toe.json"
 import * as fs from "fs"
