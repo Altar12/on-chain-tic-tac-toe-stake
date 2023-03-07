@@ -16,7 +16,7 @@ import { isValidAddress,
          Game } from "./helper"
 
 //configurations
-const connection = new web3.Connection(web3.clusterApiUrl("devnet"), "confirmed")
+const network = web3.clusterApiUrl("devnet")
 const programId = new web3.PublicKey("6kTBYbV3itwchJZmT5wzPoWHiwzFwB5zCoHJmuYdYcVX")
 
 //for taking input
@@ -43,7 +43,7 @@ function main() {
       console.error("Could not retrieve keypair from the provided file")
       console.log("Check that the file content is a valid keypair")
     }
-
+    const connection = new web3.Connection(network, "confirmed")
     const provider = new AnchorProvider(connection, new Wallet(userKeypair), {})
     const program = new Program(idl as Idl, programId, provider)
 
@@ -167,6 +167,7 @@ async function playGame(player: web3.PublicKey, game: web3.PublicKey, program: P
 async function newGame(player: web3.PublicKey, program: Program) {
 
   // get user inputs for creating a new game
+  const connection = new web3.Connection(network, "confirmed")
   const playerTwoAddr = prompter("Enter the address of player 2: ")
   const mintAddr = prompter("Enter the mint address of token to stake: ")
   if (!isValidAddress(playerTwoAddr)) {
@@ -287,6 +288,7 @@ async function newGame(player: web3.PublicKey, program: Program) {
 async function acceptGame(player: web3.PublicKey, program: Program) {
   
   // fetch all games waiting for user's acceptance (& store in userGames array)
+  const connection = new web3.Connection(network, "confirmed")
   const gameDiscriminator = Buffer.from(sha256.digest("account:Game")).subarray(0, 8)
   const games = await connection.getProgramAccounts(programId,
     {
@@ -418,6 +420,7 @@ async function acceptGame(player: web3.PublicKey, program: Program) {
 async function resumeGame(player: web3.PublicKey, program: Program) {
 
   // fetch all the ongoing games where user is a player (& store in userGames array)
+  const connection = new web3.Connection(network, "confirmed")
   const gameDiscriminator = Buffer.from(sha256.digest("account:Game")).subarray(0, 8)
   const games = await connection.getProgramAccounts(programId,
     {
@@ -575,6 +578,7 @@ async function sendCloseTxn(game: web3.PublicKey,
                             playerTwo: web3.PublicKey, 
                             stakeMint: web3.PublicKey, 
                             program: Program) {
+  const connection = new web3.Connection(network, "confirmed")
   const [authority] = web3.PublicKey.findProgramAddressSync([Buffer.from("authority")], programId)
   const stakeTokenAccount = token.getAssociatedTokenAddressSync(stakeMint, authority, true)
 
